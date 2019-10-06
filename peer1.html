@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Peer1</title>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+  </head>
+  <body>
+    <video id="vid1"></video>
+    <video id="vidp"></video>
+
+    <script>
+      let peer = new Peer("01672373-f142-407f-9752-a0511b21c47e");
+      peer.on("open", id => {
+        console.log(id);
+      });
+      // let conn = peer.connect("bvo8r1sckvs00000");
+      // conn.on("open", () => {
+      //   conn.send("sup");
+      // });
+      let video = document.querySelector("#vid1");
+      let videop = document.querySelector("#vidp");
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          video.srcObject = stream;
+          video.play();
+          let call = peer.call("32a84d42-2b48-439c-aad8-a47f17892ca4", stream);
+          call.on("stream", streamp => {
+            videop.srcObject = streamp;
+            videop.play();
+          });
+        });
+    </script>
+  </body>
+</html>
